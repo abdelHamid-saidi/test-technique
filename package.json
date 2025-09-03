@@ -6,6 +6,7 @@
         "watch": "mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
+        "browser-sync": "browser-sync start --proxy 127.0.0.1:8000 --files 'resources/**/*.php, resources/**/*.vue, resources/**/*.js, resources/**/*.css, public/**/*.css, public/**/*.js' --port 3000",
         "prod": "npm run production",
         "production": "mix --production"
     },
@@ -18,6 +19,7 @@
         "@vue/compiler-sfc": "^3.2.31",
         "autoprefixer": "^10.4.9",
         "axios": "^1.6.0",
+        "browser-sync": "^3.0.4",
         "laravel-mix": "^6.0.49",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",

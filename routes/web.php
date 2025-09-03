@@ -33,6 +33,7 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-});
 
-Route::resource('events', EventController::class);
+    // routes events sous middleware auth qui genere automatiquement 7 routes RESTful.
+    Route::resource('events', EventController::class);
+});

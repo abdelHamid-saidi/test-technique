@@ -8,10 +8,30 @@ import JetDropdown from "@/Jetstream/Dropdown.vue";
 import JetDropdownLink from "@/Jetstream/DropdownLink.vue";
 import JetNavLink from "@/Jetstream/NavLink.vue";
 import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink.vue";
+import { useAuth } from "@/Composables/useAuth";
+import { useJetstream } from "@/Composables/useJetstream";
 
 defineProps({
   title: String,
 });
+
+// Utilisation des composables pour sécuriser l'accès aux props
+const { 
+  isAuthenticated, 
+  userName, 
+  userEmail, 
+  userProfilePhotoUrl, 
+  userCurrentTeam, 
+  userCurrentTeamId, 
+  userAllTeams 
+} = useAuth();
+
+const { 
+  hasTeamFeatures, 
+  canCreateTeams, 
+  managesProfilePhotos, 
+  hasApiFeatures 
+} = useJetstream();
 
 const showingNavigationDropdown = ref(false);
 
@@ -67,14 +87,14 @@ const logout = () => {
             <div class="hidden sm:flex sm:items-center sm:ml-6">
               <div class="ml-3 relative">
                 <!-- Teams Dropdown -->
-                <JetDropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
+                <JetDropdown v-if="hasTeamFeatures" align="right" width="60">
                   <template #trigger>
                     <span class="inline-flex rounded-md">
                       <button
                         type="button"
                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition"
                       >
-                        {{ $page.props.user.current_team.name }}
+                        {{ userCurrentTeam?.name }}
                         <svg
                           class="ml-2 -mr-0.5 h-4 w-4"
                           xmlns="http://www.w3.org/2000/svg"
@@ -94,16 +114,16 @@ const logout = () => {
                   <template #content>
                     <div class="w-60">
                       <!-- Team Management -->
-                      <template v-if="$page.props.jetstream.hasTeamFeatures">
+                      <template v-if="hasTeamFeatures">
                         <div class="block px-4 py-2 text-xs text-gray-400">Manage Team</div>
 
                         <!-- Team Settings -->
                         <JetDropdownLink
-                          :href="route('teams.show', $page.props.user.current_team)"
+                          :href="route('teams.show', userCurrentTeam)"
                         >Team Settings</JetDropdownLink>
 
                         <JetDropdownLink
-                          v-if="$page.props.jetstream.canCreateTeams"
+                          v-if="canCreateTeams"
                           :href="route('teams.create')"
                         >Create New Team</JetDropdownLink>
 
@@ -112,12 +132,12 @@ const logout = () => {
                         <!-- Team Switcher -->
                         <div class="block px-4 py-2 text-xs text-gray-400">Switch Teams</div>
 
-                        <template v-for="team in $page.props.user.all_teams" :key="team.id">
+                        <template v-for="team in userAllTeams" :key="team.id">
                           <form @submit.prevent="switchToTeam(team)">
                             <JetDropdownLink as="button">
                               <div class="flex items-center">
                                 <svg
-                                  v-if="team.id == $page.props.user.current_team_id"
+                                  v-if="team.id == userCurrentTeamId"
                                   class="mr-2 h-5 w-5 text-green-400"
                                   fill="none"
                                   stroke-linecap="round"
@@ -144,13 +164,13 @@ const logout = () => {
                 <JetDropdown align="right" width="48">
                   <template #trigger>
                     <button
-                      v-if="$page.props.jetstream.managesProfilePhotos"
+                      v-if="managesProfilePhotos"
                       class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition"
                     >
                       <img
                         class="h-8 w-8 rounded-full object-cover"
-                        :src="$page.props.user.profile_photo_url"
-                        :alt="$page.props.user.name"
+                        :src="userProfilePhotoUrl"
+                        :alt="userName"
                       />
                     </button>
 
@@ -159,7 +179,7 @@ const logout = () => {
                         type="button"
                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition"
                       >
-                        {{ $page.props.user.name }}
+                        {{ userName }}
                         <svg
                           class="ml-2 -mr-0.5 h-4 w-4"
                           xmlns="http://www.w3.org/2000/svg"
@@ -183,7 +203,7 @@ const logout = () => {
                     <JetDropdownLink :href="route('profile.show')">Profile</JetDropdownLink>
 
                     <JetDropdownLink
-                      v-if="$page.props.jetstream.hasApiFeatures"
+                      v-if="hasApiFeatures"
                       :href="route('api-tokens.index')"
                     >API Tokens</JetDropdownLink>
 
@@ -240,17 +260,17 @@ const logout = () => {
           <!-- Responsive Settings Options -->
           <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="flex items-center px-4">
-              <div v-if="$page.props.jetstream.managesProfilePhotos" class="shrink-0 mr-3">
+              <div v-if="managesProfilePhotos" class="shrink-0 mr-3">
                 <img
                   class="h-10 w-10 rounded-full object-cover"
-                  :src="$page.props.user.profile_photo_url"
-                  :alt="$page.props.user.name"
+                  :src="userProfilePhotoUrl"
+                  :alt="userName"
                 />
               </div>
 
               <div>
-                <div class="font-medium text-base text-gray-800">{{ $page.props.user.name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ $page.props.user.email }}</div>
+                <div class="font-medium text-base text-gray-800">{{ userName }}</div>
+                <div class="font-medium text-sm text-gray-500">{{ userEmail }}</div>
               </div>
             </div>
 
@@ -261,7 +281,7 @@ const logout = () => {
               >Profile</JetResponsiveNavLink>
 
               <JetResponsiveNavLink
-                v-if="$page.props.jetstream.hasApiFeatures"
+                v-if="hasApiFeatures"
                 :href="route('api-tokens.index')"
                 :active="route().current('api-tokens.index')"
               >API Tokens</JetResponsiveNavLink>
@@ -272,19 +292,19 @@ const logout = () => {
               </form>
 
               <!-- Team Management -->
-              <template v-if="$page.props.jetstream.hasTeamFeatures">
+              <template v-if="hasTeamFeatures">
                 <div class="border-t border-gray-200" />
 
                 <div class="block px-4 py-2 text-xs text-gray-400">Manage Team</div>
 
                 <!-- Team Settings -->
                 <JetResponsiveNavLink
-                  :href="route('teams.show', $page.props.user.current_team)"
+                  :href="route('teams.show', userCurrentTeam)"
                   :active="route().current('teams.show')"
                 >Team Settings</JetResponsiveNavLink>
 
                 <JetResponsiveNavLink
-                  v-if="$page.props.jetstream.canCreateTeams"
+                  v-if="canCreateTeams"
                   :href="route('teams.create')"
                   :active="route().current('teams.create')"
                 >Create New Team</JetResponsiveNavLink>
@@ -294,12 +314,12 @@ const logout = () => {
                 <!-- Team Switcher -->
                 <div class="block px-4 py-2 text-xs text-gray-400">Switch Teams</div>
 
-                <template v-for="team in $page.props.user.all_teams" :key="team.id">
+                <template v-for="team in userAllTeams" :key="team.id">
                   <form @submit.prevent="switchToTeam(team)">
                     <JetResponsiveNavLink as="button">
                       <div class="flex items-center">
                         <svg
-                          v-if="team.id == $page.props.user.current_team_id"
+                          v-if="team.id == userCurrentTeamId"
                           class="mr-2 h-5 w-5 text-green-400"
                           fill="none"
                           stroke-linecap="round"

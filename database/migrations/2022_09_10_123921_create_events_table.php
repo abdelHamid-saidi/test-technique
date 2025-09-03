@@ -19,6 +19,9 @@ class CreateEventsTable extends Migration
             $table->timestamp('starts_at');
             $table->timestamp('ends_at');
             $table->timestamps();
+
+            // colonne user_id avec contrainte de clé étrangère
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
         });
     }
 

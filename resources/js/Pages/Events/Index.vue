@@ -19,17 +19,17 @@ const props = defineProps({
     ends_at: String,
 });
 
-const dateFilters = ref([null, null]);
+// const dateFilters = ref([null, null]);
 
 // Load url params into state if any existed on mount
-onMounted(() => {
-    if (props.starts_at) {
-        dateFilters.value[0] = moment(props.starts_at, format);
-    }
-    if (props.ends_at) {
-        dateFilters.value[1] = moment(props.ends_at, format);
-    }
-});
+// onMounted(() => {
+//     if (props.starts_at) {
+//         dateFilters.value[0] = moment(props.starts_at, format);
+//     }
+//     if (props.ends_at) {
+//         dateFilters.value[1] = moment(props.ends_at, format);
+//     }
+// });
 
 const itemToEdit = ref(null);
 const itemToDelete = ref(null);
@@ -55,12 +55,10 @@ const onDelete = () => {
         <div class="card">
             <div class="mb-3">
                 <div class="mb-6 flex flex-row justify-between items-end">
-                    <div>
-                        <AddEditDialog
-                            :item-to-edit="itemToEdit"
-                            @close="itemToEdit = null"
-                        />
-                    </div>
+                    <AddEditDialog
+                        :item-to-edit="itemToEdit"
+                        @close="itemToEdit = null"
+                    />
                 </div>
                 <Dialog
                     :show="itemToDelete != null"
@@ -81,16 +79,18 @@ const onDelete = () => {
                     </template>
                 </Dialog>
             </div>
-            <Table :data="events" :headings="['Title', 'Date', 'Actions']">
+            <Table :data="events" :headings="['Titre', 'Date de début', 'Date de fin', 'Actions']">
                 <template #row="{ item }">
-                    <td>{{ item.title }}</td>
-                    <td>
+                    <td class="px-6 py-4 text-left font-medium text-gray-900">
+                        {{ item.title }}
+                    </td>
+                    <td class="px-6 py-4 text-left">
                         {{ moment(item.starts_at).format("HH:mm DD/MM/YYYY") }}
                     </td>
-                    <td>
+                    <td class="px-6 py-4 text-left">
                         {{ moment(item.ends_at).format("HH:mm DD/MM/YYYY") }}
                     </td>
-                    <td>
+                    <td class=" px-6 py-4 text-center">
                         <span
                             class="px-2 text-gray-700 hover:text-blue-500 cursor-pointer transition"
                         >

@@ -52,12 +52,18 @@ class Event extends Model
     public function scopeIsBetween($query, $startsAt = null, $endsAt = null)
     {
         if ($startsAt) {
-            $query->where('events.starts_at', '>', $startsAt);
+            $query->where('events.starts_at', '>=', $startsAt);
         }
         if ($endsAt) {
             // remplace starts_at par ends_at
-            $query->where('events.ends_at', '<', $endsAt);
+            $query->where('events.ends_at', '<=', $endsAt);
         }
         return $query;
+    }
+
+    // Trie les événements par date de début (croissant)
+    public function scopeOrderByDate($query)
+    {
+        return $query->orderBy('starts_at', 'desc');
     }
 }

@@ -38,18 +38,24 @@ watch(() => props.itemToEdit, (newItem) => {
         editing.value = true;
         show.value = true;
         form.title = newItem.title;
-        form.starts_at = newItem.starts_at ? moment(newItem.starts_at).format("YYYY-MM-DD HH:mm") : '';
-        form.ends_at = newItem.ends_at ? moment(newItem.ends_at).format("YYYY-MM-DD HH:mm") : '';
+        
+        // Convertir les dates UTC vers local pour l'affichage
+        form.starts_at = moment.utc(newItem.starts_at).local().format("YYYY-MM-DDTHH:mm");
+        form.ends_at = moment.utc(newItem.ends_at).local().format("YYYY-MM-DDTHH:mm");
     }
 }, { immediate: true });
 
 // Called when the user submits the form
 const onSubmit = () => {
-    const transform = (data) => ({
-        ...data,
-        starts_at: data.starts_at ? moment(data.starts_at).format("YYYY-MM-DD HH:mm") : null,
-        ends_at: data.ends_at ? moment(data.ends_at).format("YYYY-MM-DD HH:mm") : null,
-    });
+    const transform = (data) => {
+        const transformedData = { ...data };
+        
+        // Convertir le format datetime-local vers le format serveur
+        transformedData.starts_at = moment(data.starts_at).utc().format("YYYY-MM-DD HH:mm");
+        transformedData.ends_at = moment(data.ends_at).utc().format("YYYY-MM-DD HH:mm");
+        
+        return transformedData;
+    };
 
     const requestParams = {
         preserveScroll: true,

@@ -37,10 +37,7 @@ class EventController extends Controller
         ]);
 
         Event::create([
-            // ...$data,
-            'title' => $data['title'],
-            'starts_at' => Carbon::createFromFormat('Y-m-d H:i:s', $data['starts_at']),
-            'ends_at' => Carbon::createFromFormat('Y-m-d H:i:s', $data['ends_at']),
+            ...$data,
             'user_id' => auth()->id()
         ]);
 
@@ -56,10 +53,7 @@ class EventController extends Controller
         ]);
 
         $event->update([
-            // ...$data,
-            'title' => $data['title'],
-            'starts_at' => Carbon::createFromFormat('Y-m-d H:i:s', $data['starts_at']),
-            'ends_at' => Carbon::createFromFormat('Y-m-d H:i:s', $data['ends_at'])
+            ...$data,
         ]);
 
         return Redirect::back();

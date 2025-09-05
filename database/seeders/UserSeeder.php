@@ -15,11 +15,19 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
-            'name' => 'Tester',
-            'email' => 'test@test.com',
-            'password' => bcrypt('password'),
-            'email_verified_at' => Carbon::now()
-        ]);
+        User::create(
+            [
+                'name' => 'Admin',
+                'email' => 'saidiabdelhamid.office@gmail.com',
+                'password' => bcrypt('saidiabdelhamid.office@gmail.com'),
+                'email_verified_at' => Carbon::now()
+            ],
+            [
+                'name' => 'Tester',
+                'email' => 'test@test.com',
+                'password' => bcrypt('password'),
+                'email_verified_at' => Carbon::now()
+            ]
+        );
     }
 }

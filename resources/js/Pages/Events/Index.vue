@@ -19,17 +19,17 @@ const props = defineProps({
     ends_at: String,
 });
 
-// const dateFilters = ref([null, null]);
+const dateFilters = ref([null, null]);
 
 // Load url params into state if any existed on mount
-// onMounted(() => {
-//     if (props.starts_at) {
-//         dateFilters.value[0] = moment(props.starts_at, format);
-//     }
-//     if (props.ends_at) {
-//         dateFilters.value[1] = moment(props.ends_at, format);
-//     }
-// });
+onMounted(() => {
+    if (props.starts_at) {
+        dateFilters.value[0] = moment(props.starts_at, format);
+    }
+    if (props.ends_at) {
+        dateFilters.value[1] = moment(props.ends_at, format);
+    }
+});
 
 const itemToEdit = ref(null);
 const itemToDelete = ref(null);
@@ -85,10 +85,10 @@ const onDelete = () => {
                         {{ item.title }}
                     </td>
                     <td class="px-6 py-4 text-left">
-                        {{ moment(item.starts_at).format("HH:mm DD/MM/YYYY") }}
+                        {{ moment.utc(item.starts_at).local().format("HH:mm DD/MM/YYYY") }}
                     </td>
                     <td class="px-6 py-4 text-left">
-                        {{ moment(item.ends_at).format("HH:mm DD/MM/YYYY") }}
+                        {{ moment.utc(item.ends_at).local().format("HH:mm DD/MM/YYYY") }}
                     </td>
                     <td class=" px-6 py-4 text-center">
                         <span

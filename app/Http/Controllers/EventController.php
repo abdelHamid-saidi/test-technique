@@ -17,14 +17,15 @@ class EventController extends Controller
             'ends_at' => ['nullable', 'date:Y-m-d'],
         ]);
 
+        $events = Event::where('user_id', auth()->id())
+            ->isBetween(Request::get('starts_at'), Request::get('ends_at'))
+            ->orderByDate()
+            ->get();
+
         return Inertia::render('Events/Index', [
             'starts_at' => Request::get('starts_at'),
             'ends_at' => Request::get('ends_at'),
-            // utilisation du scope isBetween et orderByDate et where user_id
-            'events' => Event::isBetween(Request::get('starts_at'), Request::get('ends_at'))
-                ->where('user_id', auth()->id())
-                ->orderByDate()
-                ->get()
+            'events' => $events
         ]);
     }
 
@@ -36,6 +37,13 @@ class EventController extends Controller
             'ends_at' => ['required', 'date:Y-m-d H:i:s']
         ]);
 
+        // Validation supplémentaire : starts_at doit être antérieur à ends_at
+        if (strtotime($data['starts_at']) >= strtotime($data['ends_at'])) {
+            return Redirect::back()->withErrors([
+                'starts_at' => 'La date de début doit être antérieure à la date de fin.'
+            ]);
+        }
+
         Event::create([
             ...$data,
             'user_id' => auth()->id()
@@ -46,11 +54,23 @@ class EventController extends Controller
 
     public function update(Event $event)
     {
+        // Vérification que l'utilisateur peut modifier cet événement
+        if ($event->user_id !== auth()->id()) {
+            abort(403, 'Vous ne pouvez pas modifier cet événement.');
+        }
+
         $data = Request::validate([
             'title' => ['required', 'max:255'],
             'starts_at' => ['required', 'date:Y-m-d H:i:s'],
             'ends_at' => ['required', 'date:Y-m-d H:i:s']
         ]);
+
+        // Validation supplémentaire : starts_at doit être antérieur à ends_at
+        if (strtotime($data['starts_at']) >= strtotime($data['ends_at'])) {
+            return Redirect::back()->withErrors([
+                'starts_at' => 'La date de début doit être antérieure à la date de fin.'
+            ]);
+        }
 
         $event->update([
             ...$data,

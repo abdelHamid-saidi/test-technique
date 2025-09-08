@@ -5,7 +5,7 @@ import moment from "moment";
 import Dialog from "@/Components/Common/DialogModal";
 import Button from "@/Components/Common/Button";
 import Input from "@/Components/Common/Input";
-import InputDate from "@/Components/Common/InputDate";
+import DateTimePicker from "@/Components/Common/DateTimePickers/DateTimePicker";
 
 const emit = defineEmits(["close"]);
 
@@ -40,8 +40,8 @@ watch(() => props.itemToEdit, (newItem) => {
         form.title = newItem.title;
         
         // Convertir les dates UTC vers local pour l'affichage
-        form.starts_at = moment.utc(newItem.starts_at).local().format("YYYY-MM-DDTHH:mm");
-        form.ends_at = moment.utc(newItem.ends_at).local().format("YYYY-MM-DDTHH:mm");
+        form.starts_at = moment.utc(newItem.starts_at).local();
+        form.ends_at = moment.utc(newItem.ends_at).local();
     }
 }, { immediate: true });
 
@@ -50,9 +50,20 @@ const onSubmit = () => {
     const transform = (data) => {
         const transformedData = { ...data };
         
-        // Convertir le format datetime-local vers le format serveur
-        transformedData.starts_at = moment(data.starts_at).utc().format("YYYY-MM-DD HH:mm");
-        transformedData.ends_at = moment(data.ends_at).utc().format("YYYY-MM-DD HH:mm");
+        // Convertir le format moment vers le format serveur (UTC)
+        if (data.starts_at && moment.isMoment(data.starts_at)) {
+            // S'assurer que la date est en UTC avant de la formater
+            transformedData.starts_at = data.starts_at.clone().utc().format("YYYY-MM-DD HH:mm");
+        } else {
+            transformedData.starts_at = null;
+        }
+        
+        if (data.ends_at && moment.isMoment(data.ends_at)) {
+            // S'assurer que la date est en UTC avant de la formater
+            transformedData.ends_at = data.ends_at.clone().utc().format("YYYY-MM-DD HH:mm");
+        } else {
+            transformedData.ends_at = null;
+        }
         
         return transformedData;
     };
@@ -105,25 +116,26 @@ const onClose = () => {
                 {{ form.errors.title }}
             </div>
 
-            <InputDate
+            <DateTimePicker
                 name="starts_at"
                 label="Start date and time"
-                v-model="form.starts_at"
+                :model-value="form.starts_at"
+                @update:model-value="form.starts_at = $event"
+                type="datetime"
                 class="mb-2"
-                required
             />
-            <div v-if="form.errors.starts_at" class="mb-4  text-red-600 text-sm">
+            <div v-if="form.errors.starts_at" class="mb-4 text-red-600 text-sm">
                 {{ form.errors.starts_at }}
             </div>
 
-            <InputDate
+            <DateTimePicker
                 name="ends_at"
                 label="End date and time"
-                v-model="form.ends_at"
+                :model-value="form.ends_at"
+                @update:model-value="form.ends_at = $event"
+                type="datetime"
                 class="mb-2"
-                required
             />
-
             <div v-if="form.errors.ends_at" class="mb-4 text-red-600 text-sm">
                 {{ form.errors.ends_at }}
             </div>

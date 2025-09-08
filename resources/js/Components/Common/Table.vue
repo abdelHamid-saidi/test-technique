@@ -12,6 +12,12 @@ defineProps({
       return [];
     },
   },
+  columnWidths: {
+    type: Array,
+    default() {
+      return [];
+    },
+  },
 });
 </script>
 
@@ -22,7 +28,8 @@ defineProps({
         <th v-for="(heading, headingIndex) in headings" :key="`heading_${headingIndex}`" 
             :class="[
               'px-6 py-4 font-semibold tracking-wide border-b border-gray-200',
-              headingIndex === headings.length - 1 ? 'text-center' : 'text-left'
+              headingIndex === headings.length - 1 ? 'text-center' : 'text-left',
+              columnWidths[headingIndex] || 'w-auto'
             ]">
           {{heading}}
         </th>

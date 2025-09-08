@@ -27,6 +27,19 @@ mix.js('resources/js/app.js', 'public/js')
                 }
             ],
         },
+        resolve: {
+            alias: {
+                'vue': 'vue/dist/vue.esm-bundler.js'
+            }
+        },
+        // résoudre l'avertissement des feature flags Vue.
+        plugins: [
+            new (require('webpack')).DefinePlugin({
+                __VUE_OPTIONS_API__: JSON.stringify(true),
+                __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
+                __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false)
+            })
+        ]
     })
     .alias({
         '@': 'resources/js',

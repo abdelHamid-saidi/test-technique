@@ -30,7 +30,6 @@
         "vue-loader": "^17.0.0"
     },
     "dependencies": {
-        "@vuepic/vue-datepicker": "^11.0.2",
         "feather-icons": "^4.29.0",
         "moment": "^2.29.4",
         "vue-feather": "^2.0.0"

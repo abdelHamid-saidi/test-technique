@@ -255,6 +255,10 @@ const logout = () => {
               :href="route('dashboard')"
               :active="route().current('dashboard')"
             >Dashboard</JetResponsiveNavLink>
+            <JetResponsiveNavLink
+              :href="route('events.index')"
+              :active="route().current('events.index')"
+            >Events</JetResponsiveNavLink>
           </div>
 
           <!-- Responsive Settings Options -->

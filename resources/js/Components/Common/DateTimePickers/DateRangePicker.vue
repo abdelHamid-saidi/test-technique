@@ -16,7 +16,7 @@ const props = defineProps({
     },
     label: {
         type: String,
-        default: "Plage de dates"
+        default: "Date range"
     },
     name: {
         type: String,
@@ -24,7 +24,7 @@ const props = defineProps({
     },
     placeholder: {
         type: String,
-        default: "Sélectionner une plage de dates"
+        default: "Select a date range"
     },
     disabled: {
         type: Boolean,
@@ -37,6 +37,10 @@ const props = defineProps({
     maxDate: {
         type: Date,
         default: undefined
+    },
+    required: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -133,6 +137,7 @@ onUnmounted(() => {
         <!-- Label -->
         <label :for="name" class="font-medium text-sm text-gray-700 block mb-2">
             <span v-if="label">{{ label }}</span>
+            <span v-if="required" class="text-red-500 ml-1">*</span>
         </label>
 
         <!-- Bouton principal -->
@@ -166,15 +171,17 @@ onUnmounted(() => {
             @mousedown.prevent
             @click.stop
         >
-            <CalendarRangePicker
-                :model-value="calendarValue"
-                :min-date="minDate"
-                :max-date="maxDate"
-                :disabled="disabled"
-                @update:model-value="onRangeChange"
-                @reset="onReset"
-                @close="closePopup"
-            />
+            <div class="w-full sm:w-auto">
+                <CalendarRangePicker
+                    :model-value="calendarValue"
+                    :min-date="minDate"
+                    :max-date="maxDate"
+                    :disabled="disabled"
+                    @update:model-value="onRangeChange"
+                    @reset="onReset"
+                    @close="closePopup"
+                />
+            </div>
         </div>
 
     </div>

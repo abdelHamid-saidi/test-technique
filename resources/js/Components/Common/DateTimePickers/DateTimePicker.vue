@@ -14,7 +14,7 @@ const props = defineProps({
     },
     label: {
         type: String,
-        default: "Date et heure"
+        default: "Date and time"
     },
     name: {
         type: String,
@@ -22,7 +22,7 @@ const props = defineProps({
     },
     placeholder: {
         type: String,
-        default: "Sélectionner une date et heure"
+        default: "Select a date and time"
     },
     disabled: {
         type: Boolean,
@@ -40,6 +40,10 @@ const props = defineProps({
         type: String,
         validator: (val) => ["date", "datetime", "time"].includes(val),
         default: "datetime",
+    },
+    required: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -130,6 +134,7 @@ onUnmounted(() => {
         <!-- Label -->
         <label :for="name" class="font-medium text-sm text-gray-700 block mb-2">
             <span v-if="label">{{ label }}</span>
+            <span v-if="required" class="text-red-500 ml-1">*</span>
         </label>
 
         <!-- Bouton principal -->
@@ -159,21 +164,23 @@ onUnmounted(() => {
         <!-- Popup calendrier -->
         <div 
             v-if="showPopup" 
-            class="absolute top-full left-0 mt-1 z-50"
+            class="absolute top-full left-0 mt-1 z-50 w-full sm:w-auto"
             @mousedown.prevent
             @click.stop
         >
-            <CalendarDateTimePicker
-                :model-value="calendarValue"
-                :min-date="minDate"
-                :max-date="maxDate"
-                :disabled="disabled"
-                :type="type"
-                @update:model-value="onDateChange"
-                @update:time="onTimeUpdate"
-                @reset="onReset"
-                @close="closePopup"
-            />
+            <div class="w-full sm:w-auto">
+                <CalendarDateTimePicker
+                    :model-value="calendarValue"
+                    :min-date="minDate"
+                    :max-date="maxDate"
+                    :disabled="disabled"
+                    :type="type"
+                    @update:model-value="onDateChange"
+                    @update:time="onTimeUpdate"
+                    @reset="onReset"
+                    @close="closePopup"
+                />
+            </div>
         </div>
 
     </div>

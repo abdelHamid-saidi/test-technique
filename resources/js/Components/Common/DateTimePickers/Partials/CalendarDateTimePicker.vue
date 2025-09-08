@@ -198,10 +198,10 @@ const nextMonth = () => {
 </script>
 
 <template>
-    <div class="calendar-popup bg-white rounded-xl shadow-md">
+    <div class="calendar-popup bg-white rounded-xl shadow-md w-full sm:w-auto">
         <div class="flex flex-col">
             <!-- Calendrier -->
-            <div class="flex-1 p-4">
+            <div class="flex-1 p-3 sm:p-4">
                 <!-- En-tête du calendrier -->
                 <div class="flex items-center justify-between mb-4">
                     <!-- Titre du mois -->
@@ -248,14 +248,14 @@ const nextMonth = () => {
                 </div>
 
                 <!-- Grille des jours -->
-                <div class="grid grid-cols-7">
+                <div class="grid grid-cols-7 gap-1">
                     <button
                         v-for="(day, index) in currentMonthDays"
                         :key="index"
                         @click="selectDate(day)"
                         :disabled="!day || disabled"
                         :class="[
-                            'h-9 w-9 text-sm relative',
+                            'h-8 w-8 sm:h-9 sm:w-9 text-sm relative',
                             {
                                 // Jours hors mois (gris clair)
                                 'text-gray-300 cursor-not-allowed': !day || !day.isCurrentMonth,
@@ -281,10 +281,10 @@ const nextMonth = () => {
                 </div>
             </div>
 
-            <!-- Sélecteur d'heure (si type datetime ou time) - Mobile: en haut, Desktop: à gauche -->
-            <div v-if="type === 'datetime' || type === 'time'" class="border-t border-gray-200 flex flex-col align-center p-4">                
+            <!-- Sélecteur d'heure (si type datetime ou time) -->
+            <div v-if="type === 'datetime' || type === 'time'" class="border-t border-gray-200 flex flex-col align-center p-3 sm:p-4">                
                 <!-- Layout responsive : horizontal sur mobile, vertical sur desktop -->
-                <div class="flex flex-row items-center justify-center gap-2">
+                <div class="flex flex-row items-center justify-center gap-2 sm:gap-4">
                     <!-- Heures -->
                     <div class="flex flex-col items-center w-2/5 text-center">
                         <label class="text-xs text-gray-500 mb-2 font-medium text-center">Hours</label>
@@ -305,7 +305,7 @@ const nextMonth = () => {
                                 @input="updateTime('hours', $event.target.value)"
                                 min="0"
                                 max="23"
-                                class="w-full h-10 text-center text-lg font-semibold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors appearance-none"
+                                class="w-full h-8 sm:h-10 text-center text-sm sm:text-lg font-semibold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors appearance-none"
                                 :disabled="disabled"
                             />
                             
@@ -345,7 +345,7 @@ const nextMonth = () => {
                                 min="0"
                                 max="55"
                                 step="5"
-                                class="w-full h-10 text-center text-lg font-semibold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors appearance-none"
+                                class="w-full h-8 sm:h-10 text-center text-sm sm:text-lg font-semibold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors appearance-none"
                                 :disabled="disabled"
                             />
                             

@@ -96,7 +96,7 @@ const onClose = () => {
 
 <template>
     <div>
-        <Button @click="onAddNew">
+        <Button @click="onAddNew" class="w-full sm:w-auto">
             <vue-feather type="plus" />
             <span class="ml-2">Add new</span>
         </Button>
@@ -105,44 +105,53 @@ const onClose = () => {
                 editing ? "Edit event" : "Add new event"
             }}</template>
 
-            <Input
-                name="title"
-                label="Title"
-                v-model="form.title"
-                class="mb-2"
-                required
-            />
-            <div v-if="form.errors.title" class="mb-4 text-red-600 text-sm">
-                {{ form.errors.title }}
-            </div>
+            <div class="space-y-4">
+                <div>
+                    <Input
+                        name="title"
+                        label="Title"
+                        v-model="form.title"
+                        required
+                    />
+                    <div v-if="form.errors.title" class="mt-2 text-red-600 text-sm">
+                        {{ form.errors.title }}
+                    </div>
+                </div>
 
-            <DateTimePicker
-                name="starts_at"
-                label="Start date and time"
-                :model-value="form.starts_at"
-                @update:model-value="form.starts_at = $event"
-                type="datetime"
-                class="mb-2"
-            />
-            <div v-if="form.errors.starts_at" class="mb-4 text-red-600 text-sm">
-                {{ form.errors.starts_at }}
-            </div>
+                <div>
+                    <DateTimePicker
+                        name="starts_at"
+                        label="Start date and time"
+                        :model-value="form.starts_at"
+                        @update:model-value="form.starts_at = $event"
+                        type="datetime"
+                        required
+                    />
+                    <div v-if="form.errors.starts_at" class="mt-2 text-red-600 text-sm">
+                        {{ form.errors.starts_at }}
+                    </div>
+                </div>
 
-            <DateTimePicker
-                name="ends_at"
-                label="End date and time"
-                :model-value="form.ends_at"
-                @update:model-value="form.ends_at = $event"
-                type="datetime"
-                class="mb-2"
-            />
-            <div v-if="form.errors.ends_at" class="mb-4 text-red-600 text-sm">
-                {{ form.errors.ends_at }}
+                <div>
+                    <DateTimePicker
+                        name="ends_at"
+                        label="End date and time"
+                        :model-value="form.ends_at"
+                        @update:model-value="form.ends_at = $event"
+                        type="datetime"
+                        required
+                    />
+                    <div v-if="form.errors.ends_at" class="mt-2 text-red-600 text-sm">
+                        {{ form.errors.ends_at }}
+                    </div>
+                </div>
             </div>
 
             <template #footer>
-                <Button variant="secondary" class="mr-3" @click="onClose">Cancel</Button>
-                <Button @click="onSubmit">Submit</Button>
+                <div class="flex flex-row gap-3 justify-end">
+                    <Button variant="secondary" class="w-full sm:w-auto sm:mr-3" @click="onClose">Cancel</Button>
+                    <Button @click="onSubmit" class="w-full sm:w-auto">Submit</Button>
+                </div>
             </template>
         </Dialog>
     </div>

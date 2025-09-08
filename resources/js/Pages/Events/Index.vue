@@ -105,19 +105,24 @@ const openFilterModal = () => {
             </h2>
         </template>
 
-        <div class="card">
+        <div class="card lg:mx-auto mx-4 rounded-lg py-6 px-4 sm:py-12 sm:px-8">
             <div class="mb-3">
-                <div class="mb-6 flex flex-row justify-between items-end">
+                <!-- Actions header - responsive -->
+                <div class="mb-6 flex flex-col sm:flex-row gap-4 sm:justify-between sm:items-end">
+                    <div class="flex-1">
                         <AddEditDialog
                             :item-to-edit="itemToEdit"
                             @close="itemToEdit = null"
                         />
-                        
-                        <!-- Button pour ouvrir le modal de filtrage -->
-                        <Button @click="openFilterModal" variant="secondary">
+                    </div>
+                    
+                    <!-- Button pour ouvrir le modal de filtrage -->
+                    <div class="flex-shrink-0">
+                        <Button @click="openFilterModal" variant="secondary" class="w-full sm:w-auto">
                             <vue-feather type="filter" />
                             <span class="ml-2">Filter</span>
                         </Button>
+                    </div>
                 </div>
                 <Dialog
                     :show="itemToDelete != null"
@@ -155,24 +160,27 @@ const openFilterModal = () => {
                     </div>
                     
                     <template #footer>
-                        <Button
-                            variant="secondary"
-                            class="mr-3"
-                            @click="showFilterModal = false"
-                        >
-                            Cancel
-                        </Button> 
-                        <Button @click="onFilterSubmit">
-                            Apply Filter
-                        </Button>
+                        <div class="flex flex-row gap-3 justify-end">
+                            <Button
+                                variant="secondary"
+                                class="w-full sm:w-auto sm:mr-3"
+                                @click="showFilterModal = false"
+                            >
+                                Cancel
+                            </Button> 
+                            <Button @click="onFilterSubmit" class="w-full sm:w-auto">
+                                Apply
+                            </Button>
+                        </div>
                     </template>
                 </Dialog>
             </div>
             <Table 
                 :data="events.data" 
-                :headings="['Titre', 'Date de début', 'Date de fin', 'Actions']"
+                :headings="['Title', 'Start date', 'End date', 'Actions']"
                 :column-widths="['w-3/6', 'w-1/6', 'w-1/6', 'w-1/6']"
             >
+                <!-- Version desktop -->
                 <template #row="{ item }">
                     <td class="px-6 py-4 text-left font-medium text-gray-900">
                         {{ item.title }}
@@ -204,14 +212,68 @@ const openFilterModal = () => {
                         </span>
                     </td>
                 </template>
+
+                <!-- Version mobile -->
+                <template #mobile-row="{ item, headings }">
+                    <div class="space-y-3">
+                        <!-- Titre -->
+                        <div>
+                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+                                {{ headings[0] }}
+                            </div>
+                            <div class="text-lg font-semibold text-gray-900">
+                                {{ item.title }}
+                            </div>
+                        </div>
+
+                        <!-- Dates -->
+                        <div class="grid grid-cols-1 gap-3">
+                            <div>
+                                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+                                    {{ headings[1] }}
+                                </div>
+                                <div class="text-sm text-gray-700">
+                                    {{ moment.utc(item.starts_at).local().format("DD/MM/YYYY HH:mm") }}
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+                                    {{ headings[2] }}
+                                </div>
+                                <div class="text-sm text-gray-700">
+                                    {{ moment.utc(item.ends_at).local().format("DD/MM/YYYY HH:mm") }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex justify-end space-x-3 pt-2 border-t border-gray-100">
+                            <button
+                                @click="itemToEdit = item"
+                                class="flex items-center px-3 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors"
+                            >
+                                <vue-feather type="edit" size="1rem" class="mr-2" />
+                                Edit
+                            </button>
+                            <button
+                                @click="itemToDelete = item"
+                                class="flex items-center px-3 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
+                            >
+                                <vue-feather type="trash" size="1rem" class="mr-2" />
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </template>
             </Table>
 
             <!-- Pagination -->
             <div v-if="events.links && events.links.length > 3" class="mt-6">
-                <div class="flex flex-col lg:flex-row justify-between">
-                    <div class="flex flex-col lg:flex-row items-center space-x-2 text-xs">
-                        <p class="text-gray-500 mt-4 lg:mt-0">
-                            Showing {{ events.from || 0 }} to {{ events.to || 0 }} of {{ events.total || 0 }} entries
+                <div class="flex flex-col space-y-4 lg:flex-row lg:justify-between lg:space-y-0">
+                    <!-- Info sur les résultats -->
+                    <div class="flex justify-center lg:justify-start">
+                        <p class="text-sm text-gray-500 text-center lg:text-left">
+                            Displaying {{ events.from || 0 }} to {{ events.to || 0 }} of {{ events.total || 0 }} entries
                         </p>
                     </div>
                     <nav aria-label="Pagination" class="flex justify-center items-center text-gray-600 mt-8 lg:mt-0">

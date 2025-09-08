@@ -22,7 +22,7 @@ class EventController extends Controller
             ->isBetween(Request::get('starts_at'), Request::get('ends_at'))
             ->orderByDate();
 
-        // Pagination avec 10 événements par page
+        // Pagination avec 25 événements par page
         $events = $eventsQuery->paginate(25)->withQueryString();
 
         return Inertia::render('Events/Index', [

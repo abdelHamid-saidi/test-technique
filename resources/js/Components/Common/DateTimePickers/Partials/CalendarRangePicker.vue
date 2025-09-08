@@ -278,25 +278,26 @@ const resetSelection = () => {
 
 <template>
     <div class="calendar-popup bg-white rounded-xl shadow-md">
-        <div class="flex">
+        <div class="flex flex-col sm:flex-row">
             <!-- Colonne gauche Quick ranges -->
-            <div class="w-52 p-4 border-r border-gray-200 flex flex-col justify-between">
-                <div>
+            <div class="p-3 sm:p-4 border-b sm:border-b-0 sm:border-r border-gray-200 flex flex-col justify-between">
+                <!-- Options rapides en grille sur mobile, liste sur desktop -->
+                <div class="grid grid-cols-2 sm:grid-cols-1 gap-2 sm:gap-0">
                     <button
                         v-for="option in quickOptions"
                         :key="option.label"
                         @click="option.action"
-                        class="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                        class="text-left px-3 py-2 text-xs sm:text-sm text-gray-900 bg-gray-100 sm:bg-transparent hover:bg-gray-200 sm:hover:bg-gray-100 rounded-lg transition-colors"
                         :disabled="disabled"
                     >
                         {{ option.label }}
                     </button>
                 </div>
                 
-                <div class="mt-auto pt-4">
+                <div class="mt-3 sm:mt-auto sm:pt-4">
                     <button 
                         @click="resetSelection"
-                        class="w-full text-left px-3 py-2 text-sm text-blue-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        class="w-full text-center sm:text-left px-3 py-2 text-xs sm:text-sm text-blue-500 hover:text-blue-600 bg-blue-50 sm:bg-transparent hover:bg-blue-100 sm:hover:bg-blue-50 rounded-lg transition-colors"
                         :disabled="disabled"
                     >
                         Reset
@@ -305,7 +306,7 @@ const resetSelection = () => {
             </div>
 
             <!-- Colonne droite - Calendrier -->
-            <div class="p-4 flex-1">
+            <div class="p-3 sm:p-4 flex-1">
                 <!-- En-tête du calendrier -->
                 <div class="flex items-center justify-between mb-4">
                     <!-- Titre du mois -->

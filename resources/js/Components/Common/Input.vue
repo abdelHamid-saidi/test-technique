@@ -8,6 +8,10 @@ defineProps({
     type: String,
     required: true,
   },
+  required: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 defineEmits(["update:modelValue"]);
@@ -27,6 +31,7 @@ defineExpose({ focus: () => input.value.focus() });
   <div>
     <label :for="name" class="font-medium text-sm text-gray-700">
       <span v-if="label">{{ label }}</span>
+      <span v-if="required" class="text-red-500 ml-1">*</span>
     </label>
     <input
       :name="name"

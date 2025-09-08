@@ -7,7 +7,7 @@ import AddEditDialog from "./Partials/AddEditDialog";
 import Button from "@/Components/Common/Button";
 import Dialog from "@/Components/Common/DialogModal";
 import Table from "@/Components/Common/Table";
-import DateRangePicker from "@/Components/Common/DateTimePickers/DateRangePicker";
+import DateRangePicker from "@/Components/DateTimePickers/DateRangePicker";
 
 const format = "YYYY-MM-DD HH:mm";
 

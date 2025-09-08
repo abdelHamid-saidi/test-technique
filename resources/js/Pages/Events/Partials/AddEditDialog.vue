@@ -5,7 +5,7 @@ import moment from "moment";
 import Dialog from "@/Components/Common/DialogModal";
 import Button from "@/Components/Common/Button";
 import Input from "@/Components/Common/Input";
-import DateTimePicker from "@/Components/Common/DateTimePickers/DateTimePicker";
+import DateTimePicker from "@/Components/DateTimePickers/DateTimePicker";
 
 const emit = defineEmits(["close"]);
 

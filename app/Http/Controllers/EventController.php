@@ -15,12 +15,15 @@ class EventController extends Controller
         Request::validate([
             'starts_at' => ['nullable', 'date:Y-m-d'],
             'ends_at' => ['nullable', 'date:Y-m-d'],
+            'page' => ['nullable', 'integer', 'min:1'],
         ]);
 
-        $events = Event::where('user_id', auth()->id())
+        $eventsQuery = Event::where('user_id', auth()->id())
             ->isBetween(Request::get('starts_at'), Request::get('ends_at'))
-            ->orderByDate()
-            ->get();
+            ->orderByDate();
+
+        // Pagination avec 10 événements par page
+        $events = $eventsQuery->paginate(25)->withQueryString();
 
         return Inertia::render('Events/Index', [
             'starts_at' => Request::get('starts_at'),

@@ -13,8 +13,8 @@ const format = "YYYY-MM-DD HH:mm";
 
 const props = defineProps({
     events: {
-        type: Array,
-        default: [],
+        type: Object,
+        default: () => ({ data: [], links: [], meta: {} }),
     },
     starts_at: String,
     ends_at: String,
@@ -169,7 +169,7 @@ const openFilterModal = () => {
                 </Dialog>
             </div>
             <Table 
-                :data="events" 
+                :data="events.data" 
                 :headings="['Titre', 'Date de début', 'Date de fin', 'Actions']"
                 :column-widths="['w-3/6', 'w-1/6', 'w-1/6', 'w-1/6']"
             >
@@ -205,6 +205,34 @@ const openFilterModal = () => {
                     </td>
                 </template>
             </Table>
+
+            <!-- Pagination -->
+            <div v-if="events.links && events.links.length > 3" class="mt-6">
+                <div class="flex flex-col lg:flex-row justify-between">
+                    <div class="flex flex-col lg:flex-row items-center space-x-2 text-xs">
+                        <p class="text-gray-500 mt-4 lg:mt-0">
+                            Showing {{ events.from || 0 }} to {{ events.to || 0 }} of {{ events.total || 0 }} entries
+                        </p>
+                    </div>
+                    <nav aria-label="Pagination" class="flex justify-center items-center text-gray-600 mt-8 lg:mt-0">
+                        <button
+                            v-for="(link, index) in events.links"
+                            :key="index"
+                            @click="link.url && Inertia.get(link.url)"
+                            :disabled="!link.url"
+                            :class="[
+                                'px-4 py-2 rounded transition-colors',
+                                link.active
+                                    ? 'bg-gray-200 text-gray-900 font-medium hover:bg-gray-100'
+                                    : link.url
+                                    ? 'hover:bg-gray-100'
+                                    : 'opacity-50 cursor-not-allowed'
+                            ]"
+                            v-html="link.label"
+                        ></button>
+                    </nav>
+                </div>
+            </div>
         </div>
     </AppLayout>
 </template>

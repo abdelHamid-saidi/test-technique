@@ -41,6 +41,11 @@ const props = defineProps({
     required: {
         type: Boolean,
         default: false
+    },
+    firstDayOfWeek: {
+        type: Number,
+        default: 1, // 1 = Lundi, 0 = Dimanche, etc.
+        validator: (value) => value >= 0 && value <= 6
     }
 });
 
@@ -177,6 +182,7 @@ onUnmounted(() => {
                     :min-date="minDate"
                     :max-date="maxDate"
                     :disabled="disabled"
+                    :first-day-of-week="firstDayOfWeek"
                     @update:model-value="onRangeChange"
                     @reset="onReset"
                     @close="closePopup"

@@ -156,6 +156,7 @@ const openFilterModal = () => {
                             label="Date range"
                             v-model="dateFilters"
                             placeholder="Select a date range"
+                            first-day-of-week="0"
                         />
                     </div>
                     

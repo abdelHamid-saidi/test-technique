@@ -18,6 +18,11 @@ const props = defineProps({
     disabled: {
         type: Boolean,
         default: false
+    },
+    firstDayOfWeek: {
+        type: Number,
+        default: 1, // 1 = Lundi, 0 = Dimanche, etc.
+        validator: (value) => value >= 0 && value <= 6
     }
 });
 
@@ -55,8 +60,11 @@ const generateDaysForMonth = (year, month) => {
     const firstDayOfWeek = startOfMonth.day();
     const prevMonth = startOfMonth.clone().subtract(1, 'month');
     const daysInPrevMonth = prevMonth.daysInMonth();
+
+    // Convertir pour correspondre au premier jour configuré
+    const firstDayInOurFormat = (firstDayOfWeek - props.firstDayOfWeek + 7) % 7;
     
-    for (let i = firstDayOfWeek - 1; i >= 0; i--) {
+    for (let i = firstDayInOurFormat - 1; i >= 0; i--) {
         const day = daysInPrevMonth - i;
         const date = prevMonth.clone().date(day);
         days.push({
@@ -122,7 +130,15 @@ const generateDaysForMonth = (year, month) => {
 const currentMonthDays = computed(() => generateDaysForMonth(currentYear.value, currentMonthIndex.value));
 
 // Noms des jours de la semaine en anglais
-const weekDays = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+const allWeekDays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+const weekDays = computed(() => {
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+        const dayIndex = (props.firstDayOfWeek + i) % 7;
+        days.push(allWeekDays[dayIndex]);
+    }
+    return days;
+});
 
 // Noms des mois en anglais
 const monthNames = [

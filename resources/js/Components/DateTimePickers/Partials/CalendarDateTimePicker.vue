@@ -66,8 +66,11 @@ const generateDaysForMonth = (year, month) => {
     const firstDayOfWeek = startOfMonth.day();
     const prevMonth = startOfMonth.clone().subtract(1, 'month');
     const daysInPrevMonth = prevMonth.daysInMonth();
+
+    // Convertir pour correspondre (lundi=0, dimanche=6)
+    const firstDayInOurFormat = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
     
-    for (let i = firstDayOfWeek - 1; i >= 0; i--) {
+    for (let i = firstDayInOurFormat - 1; i >= 0; i--) {
         const day = daysInPrevMonth - i;
         const date = prevMonth.clone().date(day);
         days.push({

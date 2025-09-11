@@ -43,6 +43,7 @@ class Event extends Model
 
     /**
      * Limite une requête pour filtrer les événements par dates flexibles.
+     * Accepte les événements qui se chevauchent avec la plage de dates donnée.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  DateTime  $startsAt
@@ -51,13 +52,20 @@ class Event extends Model
      */
     public function scopeIsBetween($query, $startsAt = null, $endsAt = null)
     {
-        if ($startsAt) {
-            $query->where('events.starts_at', '>=', $startsAt);
+        if ($startsAt && $endsAt) {
+            // Événements qui commencent dans la plage OU se terminent dans la plage
+            $query->whereBetween('events.starts_at', [$startsAt, $endsAt])
+                ->orWhereBetween('events.ends_at', [$startsAt, $endsAt]);
+        } elseif ($startsAt) {
+            // Événements qui commencent après cette date OU se terminent après cette date
+            $query->where('events.starts_at', '>=', $startsAt)
+                ->orWhere('events.ends_at', '>=', $startsAt);
+        } elseif ($endsAt) {
+            // Événements qui se terminent avant cette date OU commencent avant cette date
+            $query->where('events.ends_at', '<=', $endsAt)
+                ->orWhere('events.starts_at', '<=', $endsAt);
         }
-        if ($endsAt) {
-            // remplace starts_at par ends_at
-            $query->where('events.ends_at', '<=', $endsAt);
-        }
+
         return $query;
     }
 

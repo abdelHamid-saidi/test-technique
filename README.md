@@ -1,75 +1,153 @@
-<h1 align="center">DateRangePicker Demo</h1>
+# DateRangePicker Demo
 
-This project serves as a demo for a custom-made DateRangePicker component. It was made using Laravel 8, Vue3, InertiaJS and momentjs.
+[![Laravel](https://img.shields.io/badge/Laravel-10.x-red.svg)](https://laravel.com)
+[![Vue.js](https://img.shields.io/badge/Vue.js-3.x-green.svg)](https://vuejs.org)
+[![Inertia.js](https://img.shields.io/badge/Inertia.js-0.11.x-purple.svg)](https://inertiajs.com)
+[![Docker](https://img.shields.io/badge/Docker-Enabled-blue.svg)](https://docker.com)
 
-## Requirements
+Une application de démonstration présentant un composant DateRangePicker personnalisé développé avec Laravel 10, Vue.js 3, Inertia.js et Moment.js.
 
--   Git
--   Docker
+## Fonctionnalités
+
+- **DateRangePicker personnalisé** : Composant Vue.js 3 pour la sélection de plages de dates
+- **Gestion d'événements** : CRUD complet pour la gestion des événements
+- **Base de données** : Gestion des données et migrations Laravel
+
+## Technologies utilisées
+
+### Backend
+- **Laravel 10.x** - Framework PHP
+- **Laravel Jetstream** - Authentification et gestion des sessions
+- **Laravel Sanctum** - API Authentication
+- **Inertia.js** - SPA sans API
+- **MySql** - Base de données
+
+### Frontend
+- **Vue.js 3** - Framework JavaScript
+- **Inertia.js** - Routage côté client
+- **Tailwind CSS** - Framework CSS
+- **Moment.js** - Manipulation des dates
+- **Feather Icons** - Icônes
+
+### DevOps
+- **Docker & Docker Compose** - Containerisation
+- **phpMyAdmin** - Administration de base de données
+- **Laravel Mix** - Compilation des assets
+
+## Prérequis
+
+- **Git** - Contrôle de version
+- **Docker** - Containerisation
+- **Docker Compose** - Orchestration des conteneurs
 
 ## Installation
 
--   Clone the project
+### 1. Cloner le projet
 
--   Create a _.env_ file, a _.env.example_ has been included to help you get started
+```bash
+git clone https://github.com/abdelHamid-saidi/test-technique.git
+cd test-technique
+```
 
-```shell
+### 2. Configuration de l'environnement
+
+```bash
 cp .env.example .env
 ```
 
--   Run the containers
+### 3. Démarrer les conteneurs
 
-```shell
+```bash
 docker compose up -d
 ```
 
--   Enter the _web_ container
+### 4. Accéder au conteneur web
 
-```shell
-docker container ls # Get container ID
+```bash
+# Lister les conteneurs pour obtenir l'ID
+docker container ls
+
+# Accéder au conteneur web
 docker exec -it {CONTAINER_ID} bash
 ```
 
--   Install dependencies & build assets
+### 5. Installation des dépendances
 
-```shell
+```bash
+# Dépendances PHP
 composer install
-yarn install
-yarn dev
+
+# Dépendances Node.js
+npm install
+
+# Compilation des assets
+npm run dev
 ```
 
--   Add application key and generate storage link
+## Services disponibles
 
-```shell
-php artisan key:generate
-php artisan storage:link
+Une fois l'application démarrée, les services suivants sont accessibles :
+
+| Service | Port | Description |
+|---------|------|-------------|
+| **Application Web** | 80 | Interface principale de l'application |
+| **phpMyAdmin** | 8080 | Administration de la base de données |
+| **MySQL** | 3306 | Base de données MySQL/MariaDB |
+
+## Utilisation
+
+### Connexion
+
+Un utilisateur de test est automatiquement créé lors de l'installation :
+
+- **Email** : `test@test.com`
+- **Mot de passe** : `password`
+
+## Structure du projet
+
+```
+├── app/
+│   ├── Http/Controllers/     # Contrôleurs Laravel
+│   ├── Models/              # Modèles Eloquent
+│   └── Policies/            # Politiques d'autorisation
+├── database/
+│   ├── migrations/          # Migrations de base de données
+│   ├── seeders/            # Seeders pour les données de test
+│   └── factories/          # Factories pour les tests
+├── resources/
+│   ├── js/
+│   │   ├── Components/     # Composants Vue.js
+│   │   ├── Pages/         # Pages Inertia.js
+│   │   └── Layouts/       # Layouts Vue.js
+│   └── views/             # Vues Blade
+├── routes/
+│   ├── web.php            # Routes web
+│   └── api.php            # Routes API
+└── tests/                 # Tests automatisés
 ```
 
--   Migrate and seed the database
-
-```shell
-php artisan migrate --seed
+### Backend (PHP)
+```bash
+php artisan serve          # Serveur de développement
+php artisan migrate        # Exécuter les migrations
+php artisan db:seed        # Exécuter les seeders
+php artisan key:generate   # Générer la clé d'application
 ```
 
-The application should now be up and running at
+### Frontend (Node.js)
+```bash
+npm run dev                   # Compilation en mode développement
+npm run watch                 # Surveillance des fichiers
+```
 
-## Services
+## Licence
 
-After running the docker application, several services are available to use :
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](https://opensource.org/licenses/MIT) pour plus de détails.
 
--   Port 80 : DRP-Demo application
--   Port 8080 : phpMyAdmin for easy database administration
--   Port 3306 : MariaDB instance
+## Autre
 
-## Usage
+Développé dans le cadre d'un test technique.
 
-In order to access the DateRangePicker and the events CRUD, you will first have to open the app, then login. A test user is automatically created during the installation phase :
+---
 
--   test@test.com
--   password
-
-Once logged in, click on the _Events_ tab. Here you will find all the requested functionality.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Note** : Cette application est une démonstration technique et ne doit pas être utilisée en production sans modifications de sécurité appropriées.
